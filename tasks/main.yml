@@ -15,6 +15,26 @@
     - configuration
   become: true
 
+- name: Check if the music volume exists
+  ansible.builtin.stat:
+    path: "{{ navidrome_music_volume }}"
+  register: music
+  tags:
+    - configuration
+
+- name: Set up music volume
+  ansible.builtin.file:
+    state: directory
+    path: "{{ navidrome_music_volume }}"
+    owner: "{{ ansible_effective_user_id }}"
+    group: "{{ ansible_effective_group_id }}"
+    mode: "0750"
+  tags:
+    - configuration
+  become: true
+  when: not music.stat.exists
+
+
 - name: Write configuration files
   ansible.builtin.template:
     src: "{{ item }}.j2"
