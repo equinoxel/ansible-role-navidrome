@@ -7,7 +7,7 @@ services:
       - ~/navidrome/env.navidrome.conf
     volumes:
       - {{ navidrome_config_volume }}:/data
-      - {{ navidrome_music_volume }}:/music
+      - {{ navidrome_music_volume }}:/music:ro
     ports:
       - {{ navidrome_host_port }}:4533
     networks:
