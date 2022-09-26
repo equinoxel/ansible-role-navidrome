@@ -1,25 +1,97 @@
-Role Name
-=========
+# laurivan.navidrome
 
-A brief description of the role goes here.
+Install navidrome and optionally bonob in docker.
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+You need a machine with Docker installed.
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+All variables are listed below (see also `defaults/main.yml`).
 
-Dependencies
-------------
+### Navidrome
+
+You can (and should) specify the version of the navidrome image:
+
+```yaml
+navidrome_image_version: 'latest'
+```
+
+Navidrome needs a place to store its configuration and another to pick up music from:
+
+```yaml
+navidrome_config_volume: '/mnt/config-local/navidrome'
+navidrome_music_volume: '/mnt/music'
+```
+If you have multiple folders with music, you should create a parent and build symbolic links to them.
+
+The web interface is available at the following port:
+
+```yaml
+navidrome_host_port: 48533
+```
+
+### Bonob
+
+If you have e.g. a Sonos system in the house, you may install also Bonob by setting `bonob_enabled` to `true`. the default is:
+
+```yml
+bonob_enabled: false
+```
+You can also specify the bonob image version and the port at which is available:
+
+```yml
+bonob_image_version: 'latest'
+bonob_host_port: 48534
+```
+
+You can change the colors of the bonob icon displayed:
+
+```yml
+bonob_icon_color: "beige"
+bonob_icon_background: "red"
+```
+#### Sonos
+
+The sonos-related variables are:
+
+```yml
+bonob_sonos_auto_register: 'true'
+bonob_sonos_device_discovery: 'true'
+bonob_sonos_seed_host: 
+bonob_sonos_service_id: "246"
+```
+
+If you try sonos autodiscovery and it doesn't work, please:
+
+1. Find the IP of one of the Sonos devices
+2. Set `bonob_sonos_seed_host` to that IP
+3. Replay the role
+
+You can also add custom clients for streaming:
+
+```yaml
+bonob_subsonic_custom_clients: 'audio/flac'
+```
+
+For more details, please see the [Bonob documentation](https://github.com/simojenki/bonob).
+
+### Generic
+
+You will need to specify a timezone:
+
+```yml
+timezone: 'Europe/Brussels'
+```
+
+Otherwise, Bonob will point to *Australia/Melbourne*, which may not be the same as Navidrome.
+
+## Dependencies
 
 A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
-Example Playbook
-----------------
+## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
@@ -27,12 +99,10 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: username.rolename, x: 42 }
 
-License
--------
+## License
 
-BSD
+MIT
 
-Author Information
-------------------
+## Author Information
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was created in 2022 by [Laur Ivan](https://www.laurivan.com).
