@@ -1,54 +1,11 @@
 ---
-# tasks file for navidrome
 
-- name: Set up directories
-  ansible.builtin.file:
-    state: directory
-    path: "{{ item }}"
-    owner: "{{ ansible_effective_user_id }}"
-    group: "{{ ansible_effective_group_id }}"
-    mode: "0750"
-  with_items:
-    - "{{ navidrome_config_volume }}"
-    - "~/navidrome"
+- name: "NAVIDROME | Configure"
+  import_tasks: config.yml
   tags:
-    - configuration
-  become: true
+    - navidrome.configure
 
-- name: Check if the music volume exists
-  ansible.builtin.stat:
-    path: "{{ navidrome_music_volume }}"
-  register: music
+- name: "NAVIDROME | Install"
+  import_tasks: install.yml
   tags:
-    - configuration
-
-- name: Set up music volume
-  ansible.builtin.file:
-    state: directory
-    path: "{{ navidrome_music_volume }}"
-    owner: "{{ ansible_effective_user_id }}"
-    group: "{{ ansible_effective_group_id }}"
-    mode: "0750"
-  tags:
-    - configuration
-  become: true
-  when: not music.stat.exists
-
-
-- name: Write configuration files
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "~/navidrome/{{ item }}"
-    mode: '0640'
-  loop:
-    - "docker-compose.yml"
-    - "env.navidrome.conf"
-    - "env.bonob.conf"
-  tags:
-    - configuration
-
-- name: Ensure navirdome is running.
-  community.docker.docker_compose:
-    project_src: ~/navidrome/
-    build: false
-  become: false
+    - navidrome.install

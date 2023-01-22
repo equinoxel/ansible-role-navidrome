@@ -1,0 +1,9 @@
+---
+
+# Deploy navidrome
+
+- name: "NAVIFROME | Ensure navirdome is running"
+  community.docker.docker_compose:
+    project_src: "{{ navidrome_docker_path | expanduser | realpath }}"
+    build: false
+  become: false

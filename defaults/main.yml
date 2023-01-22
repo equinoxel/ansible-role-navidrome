@@ -1,27 +1,37 @@
 ---
 # defaults file for navidrome
 
-navidrome_image_version: 'latest'
-
-navidrome_config_volume: '/mnt/config-local/navidrome'
+navidrome_root_path: /var/local/navidrome
+navidrome_config_volume: "{{ navidrome_root_path }}/config"
+navidrome_docker_path: "{{ navidrome_root_path }}/docker"
 navidrome_music_volume: '/mnt/music'
 
-navidrome_host_port: 48533
+navidrome_skeleton_paths:
+  - "{{ navidrome_docker_path }}"
+  - "{{ navidrome_config_volume }}"
 
 timezone: 'Europe/Brussels'
 
-# Bonob
-bonob_enabled: false
-bonob_image_version: 'latest'
-bonob_host_port: 48534
-bonob_icon_color: "beige"
-bonob_icon_background: "red"
+navidrome:
+  image_version: 'latest'
+  host_port: 48533
 
-## Bonob sonos settings
-bonob_sonos_auto_register: 'true'
-bonob_sonos_device_discovery: 'true'
-bonob_sonos_seed_host: 
-bonob_sonos_service_id: "246"
+
+# Bonob
+bonob:
+  enabled: false
+  image_version: 'latest'
+  host_port: 48534
+  icon_color: "beige"
+  icon_background: "red"
+
+  ## Bonob sonos settings
+  sonos:
+    auto_register: 'true'
+    device_discovery: 'true'
+    seed_host: 
+    service_id: "246"
 
 ## Subsonic
-bonob_subsonic_custom_clients: 'audio/flac'
+  subsonic:
+    custom_clients: 'audio/flac'

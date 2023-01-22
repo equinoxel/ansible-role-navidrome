@@ -1,27 +1,28 @@
 version: "3.3"
 services:
   navidrome:
-    image: "deluan/navidrome:{{ navidrome_image_version }}"
+    image: "deluan/navidrome:{{ navidrome.image_version }}"
     restart: always
     env_file:
-      - ~/navidrome/env.navidrome.conf
+      - "{{ navidrome_docker_path | expanduser | realpath }}/env.navidrome.conf"
     volumes:
       - {{ navidrome_config_volume }}:/data
       - {{ navidrome_music_volume }}:/music:ro
     ports:
-      - {{ navidrome_host_port }}:4533
+      - {{ navidrome.host_port }}:4533
     networks:
       - navidrome
-{% if bonob_enabled %}
+
+{% if bonob.enabled %}
   bonob:
-    image: simojenki/bonob:{{ bonob_image_version }}
+    image: simojenki/bonob:{{ bonob.image_version }}
     restart: always
     depends_on:
       - navidrome
     env_file:
-      - ~/navidrome/env.bonob.conf
+      - "{{ navidrome_docker_path | expanduser | realpath }}/env.bonob.conf"
     ports:
-      - "{{ bonob_host_port }}:3000"
+      - "{{ bonob.host_port }}:3000"
     networks:
       - navidrome
       - default
