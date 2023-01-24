@@ -1,11 +1,10 @@
 ---
 # defaults file for navidrome
 
-navidrome_root_path: /var/local/navidrome
-navidrome_config_volume: "{{ navidrome_root_path }}/config"
-navidrome_docker_path: "{{ navidrome_root_path }}/docker"
+navidrome_root_path: /var/local
+navidrome_config_volume: "{{ navidrome_root_path }}/config/navidrome"
+navidrome_docker_path: "{{ navidrome_root_path }}/docker/navidrome"
 navidrome_music_volume: '/mnt/music'
-
 navidrome_skeleton_paths:
   - "{{ navidrome_docker_path }}"
   - "{{ navidrome_config_volume }}"
